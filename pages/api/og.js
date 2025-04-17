@@ -4,9 +4,9 @@ export const config = {
   runtime: 'edge',
 };
 
-export default async function handler(req) {
+export default function handler(req) {
   const { searchParams } = new URL(req.url);
-  const text = searchParams.get('text') || 'Your gut deserves better. Start with one bite.';
+  const text = searchParams.get('text') || 'Track your gut. Fix your food. Try BiteRight.';
 
   return new ImageResponse(
     (
@@ -18,27 +18,14 @@ export default async function handler(req) {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: '100px',
-          fontSize: 64,
+          padding: '80px',
+          fontSize: 60,
           color: 'white',
           fontFamily: 'sans-serif',
           textAlign: 'center',
-          lineHeight: 1.4,
-          position: 'relative',
         }}
       >
-        <div>{text}</div>
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 60,
-            right: 80,
-            fontSize: 24,
-            opacity: 0.4,
-          }}
-        >
-          @biteright.app
-        </div>
+        {text}
       </div>
     ),
     {
