@@ -4,45 +4,97 @@ export const config = {
   runtime: 'edge',
 };
 
-export default function handler(req) {
+export default async function handler(req) {
   const { searchParams } = new URL(req.url);
-  const text = searchParams.get('text') || 'Track your gut. Fix your food. Try BiteRight.';
+
+  const text = searchParams.get('text') || 'Track your gut. Fix your food.';
+  const emoji = ['🧠', '🥦', '🔥', '💡', '🌿', '🧬'][Math.floor(Math.random() * 6)];
+  const quoteLength = text.length;
+
+  // Font size logic
+  const fontSize = quoteLength <= 80 ? 64 : quoteLength <= 160 ? 52 : 44;
+
+  // Rotating gradient backgrounds
+  const gradients = [
+    'linear-gradient(135deg, #FF6F61, #FFE3DC)',
+    'radial-gradient(circle at top left, #FF6F61, #FDEDEC)',
+    'linear-gradient(135deg, #FF6F61, #F7FFF7)',
+    'linear-gradient(to bottom right, #FF6F61, #F06292)',
+    'radial-gradient(circle at center, #FF6F61, #FFFFFF)'
+  ];
+  const background = gradients[Math.floor(Math.random() * gradients.length)];
 
   return new ImageResponse(
     (
       <div
         style={{
-          backgroundColor: '#FF6F61',
-          height: '100%',
           width: '100%',
+          height: '100%',
+          background,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: '60px',
-          fontSize: 56,
-          color: '#fff',
-          fontFamily: 'Inter, sans-serif',
+          padding: '100px 80px',
+          color: '#ffffff',
+          fontFamily: 'Poppins, sans-serif',
           textAlign: 'center',
-          lineHeight: 1.4,
+          position: 'relative',
         }}
       >
+        {/* Logo */}
+        <img
+          src="https://biteright-quote-generator-2yja.vercel.app/biterightlogo-colored.png"
+          width="120"
+          alt="BiteRight Logo"
+          style={{
+            position: 'absolute',
+            top: 60,
+            left: 60,
+          }}
+        />
+
+        {/* Emoji flair for short quotes */}
+        {quoteLength <= 120 && (
+          <div
+            style={{
+              fontSize: 48,
+              marginBottom: 20,
+            }}
+          >
+            {emoji}
+          </div>
+        )}
+
+        {/* Main Quote */}
         <div
           style={{
-            maxWidth: '900px',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+            maxWidth: 900,
+            fontSize,
+            lineHeight: 1.4,
+            whiteSpace: 'pre-wrap',
           }}
         >
           {text}
         </div>
 
+        {/* Footer */}
         <div
           style={{
+            position: 'absolute',
+            bottom: 60,
+            right: 80,
             fontSize: 24,
-            marginTop: 40,
-            color: '#fff',
-            opacity: 0.9,
-            letterSpacing: '1px',
+            opacity: 0.6,
           }}
         >
-          @biteright.app
+          Track your gut. Fix your food.
+        </div>
+      </div>
+    ),
+    {
+      width: 1080,
+      height: 1350,
+    }
+  );
+}
